@@ -64,7 +64,7 @@ async function sumAllItemPricesOnCart() {
 }
 
 async function cartCounter() {
-  const liCounter = document.querySelectorAll('.cart__item').length;
+  const liCounter = document.querySelectorAll(); 
   document.querySelector('.itemsCounter').innerText = liCounter;
 }
 
