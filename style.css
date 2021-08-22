@@ -56,3 +56,9 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.tot-price {
+  background-color: forestgreen;
+    text-align: center;
+    color: floralwhite;
+}

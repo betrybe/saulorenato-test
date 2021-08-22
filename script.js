@@ -35,9 +35,11 @@ function createProductItemElement({ sku, name, image, salePrice }) {
   divBox.appendChild(divContent);
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   divContent.appendChild(createCustomElement('span', 'item__title revertText ', name));
-  divContent.appendChild(createCustomElement('span', 'item__title revertText ', `Preço: R$${salePrice.toFixed(2)}`))
+  divContent.appendChild(createCustomElement('span', 'item__title revertText ',
+  `Preço: R$${salePrice.toFixed(2)}`));
   section.appendChild(createProductImageElement(image));
-  divContent.appendChild(createCustomElement('button', 'item__add revertText', 'Adicionar ao carrinho!'));
+  divContent.appendChild(createCustomElement('button', 'item__add revertText',
+  'Adicionar ao carrinho!'));
 
   return section;
 }
@@ -57,8 +59,13 @@ async function fetchItemById(itemId) {
 async function sumAllItemPricesOnCart() {
   let sumPrices = 0;
   const allCartItens = document.querySelectorAll('.cart__item');
-  allCartItens.forEach(item => (sumPrices += +item.innerText.split('$')[1]));
+  allCartItens.forEach((item) => { sumPrices += +item.innerText.split('$')[1]; });
   document.querySelector('.total-price').innerText = sumPrices.toFixed(2);
+}
+
+async function cartCounter() {
+  const liCounter = document.querySelectorAll('.cart__item').length;
+  document.querySelector('.itemsCounter').innerText = liCounter;
 }
 
 function storageCart() {
@@ -81,7 +88,7 @@ function clearCart() {
   const buttomClear = document.querySelector('.empty-cart');
   buttomClear.addEventListener('click', () => {
     document.querySelectorAll('.cart__item')
-    .forEach(li => li.remove());
+    .forEach((li) => li.remove());
     sumAllItemPricesOnCart();
     storageCart();
     cartCounter();
@@ -117,22 +124,24 @@ function addItem() {
 function loadStorageCart() {
   document.querySelector('ol.cart__items').innerHTML = localStorage.getItem('cartProducts');
   document.querySelectorAll('li.cart__item')
-  .forEach(li => li.addEventListener('click', cartItemClickListener));
+  .forEach((li) => li.addEventListener('click', cartItemClickListener));
   sumAllItemPricesOnCart();
   cartCounter();
 }
 
 async function fetchAllProducts(productType) {
   createLoadingSpan();
-  document.querySelectorAll('.item').forEach(item => item.remove())
+  document.querySelectorAll('.item').forEach((item) => item.remove());
   const endPoint = `https://api.mercadolibre.com/sites/MLB/search?q=${productType}`;
   const response = await fetch(endPoint);
   const object = await response.json();
   removeLoadingSpan();
-  const results = object.results;
+  const { results } = object;
   results.forEach((result) => {
     const { id, title, thumbnail, price } = result;
-    const structure = createProductItemElement({ sku: id, name: title, image: thumbnail, salePrice: price});
+    const structure = createProductItemElement(
+      { sku: id, name: title, image: thumbnail, salePrice: price },
+);
     document.querySelector('.items').appendChild(structure);
   });
   addItem();
@@ -140,8 +149,8 @@ async function fetchAllProducts(productType) {
 }
 
 function cartDisplayChanger() {
-  let sectionCart = document.querySelector('section.cart');
-  const cartDisplay = getComputedStyle(sectionCart).display
+  const sectionCart = document.querySelector('section.cart');
+  const cartDisplay = getComputedStyle(sectionCart).display;
   if (cartDisplay === 'flex') {
     sectionCart.style.display = 'none';
   } else {
@@ -153,10 +162,10 @@ function cartListener() {
   document.querySelector('.displayCart').addEventListener('click', cartDisplayChanger);
 }
 
-async function cartCounter() {
+ /* async function cartCounter() {
   const liCounter = document.querySelectorAll('.cart__item').length;
   document.querySelector('.itemsCounter').innerText = liCounter;
-}
+} */
 
 async function getInput() {
   const input = document.querySelector('.search');
@@ -165,17 +174,17 @@ async function getInput() {
     if (input.value === '') {
       alert('Set any product to search');
       fetchAllProducts('computador');
-    };
+    }
     fetchAllProducts(input.value);
   });
     input.addEventListener('keyup', (event) => {
     if (event.keyCode === 13) {
       fetchAllProducts(input.value);
-    };
+    }
     if (event.keyCode === 13 && input.value === '') {
       alert('Set any product to search');
       fetchAllProducts('computador');
-    };
+    }
   });
 }
 
@@ -187,4 +196,3 @@ window.onload = function onload() {
   cartCounter();
   getInput();
 };
-
