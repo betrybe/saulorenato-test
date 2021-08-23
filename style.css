@@ -14,6 +14,7 @@
 .item {
   border: 2px solid blue;
   border-radius: 5px;
+  border: groove;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -54,4 +55,10 @@
   flex-basis: 1;
   font-size: 16pt;
   text-align: center;
+}
+
+.tot-price {
+  background-color: forestgreen;
+    text-align: center;
+    color: floralwhite;
 }
